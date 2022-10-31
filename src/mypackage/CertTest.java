@@ -377,9 +377,6 @@ public class CertTest extends Applet implements ExtendedLength {
   			len=0;
   			len=setArray(apdu,arr,len);
   			break;
-  		case 0x22:
-  			//sendItFully(apdu,arr);
-  			break;
   		case 0x23:
   			sendIt(apdu,arr,len);
   			break;
