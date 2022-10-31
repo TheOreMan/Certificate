@@ -125,15 +125,6 @@ public class CertTest extends Applet implements ExtendedLength {
 		}
 	}
 
-	/*
-	public void sendItFully(APDU apdu,byte[] arr) {
-		short toSend=(short) arr.length;
-    apdu.setOutgoing();
-    apdu.setOutgoingLength(toSend);
-    apdu.sendBytesLong(arr, (short) 0, (short) toSend);
-	}
-	*/
-
 	public short setArray(APDU apdu,byte[] arr,short len) {
     byte[] buffer=apdu.getBuffer();
     short bytesRead = apdu.setIncomingAndReceive();
@@ -376,9 +367,6 @@ public class CertTest extends Applet implements ExtendedLength {
   			for (short i=0;i<2000;i++) arr[i]=0;
   			len=0;
   			len=setArray(apdu,arr,len);
-  			break;
-  		case 0x22:
-  			//sendItFully(apdu,arr);
   			break;
   		case 0x23:
   			sendIt(apdu,arr,len);
