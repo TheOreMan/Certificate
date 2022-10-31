@@ -12,16 +12,16 @@ import java.lang.*;
 
 public class CertTest extends Applet implements ExtendedLength {
 	private byte[] cert;
-  //private byte[] privKey;
-	//private byte[] pubKey;
+  private byte[] privKey;
+	private byte[] pubKey;
 	private byte[] privExp;
 	private byte[] pubExp;
 	private byte[] privMod;
 	private byte[] pubMod;
 	private byte[] arrSigned;
 	private short certLen;
-	//private short privKeyLen;
-	//private short pubKeyLen;
+	private short privKeyLen;
+	private short pubKeyLen;
 	private short privExpLen;
 	private short pubExpLen;
 	private short privModLen;
