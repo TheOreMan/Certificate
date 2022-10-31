@@ -12,7 +12,7 @@ import java.lang.*;
 
 public class CertTest extends Applet implements ExtendedLength {
 	private byte[] cert;
-  private byte[] privKey;
+  //private byte[] privKey;
 	private byte[] pubKey;
 	private byte[] privExp;
 	private byte[] pubExp;
@@ -20,7 +20,7 @@ public class CertTest extends Applet implements ExtendedLength {
 	private byte[] pubMod;
 	private byte[] arrSigned;
 	private short certLen;
-	private short privKeyLen;
+	//private short privKeyLen;
 	private short pubKeyLen;
 	private short privExpLen;
 	private short pubExpLen;
@@ -38,7 +38,7 @@ public class CertTest extends Applet implements ExtendedLength {
 
 	protected CertTest() {
 		cert=new byte[2000];
-	  privKey=new byte[2000];
+	  //privKey=new byte[2000];
 		pubKey=new byte[2000];
 		privExp=new byte[2000];
 		pubExp=new byte[2000];
@@ -46,7 +46,7 @@ public class CertTest extends Applet implements ExtendedLength {
 		pubMod=new byte[2000];
 		arrSigned=new byte[2000];
 		certLen=0;
-		privKeyLen=0;
+		//privKeyLen=0;
 		pubKeyLen=0;
 		privExpLen=0;
 		privModLen=0;
@@ -349,10 +349,6 @@ public class CertTest extends Applet implements ExtendedLength {
         			arr=privMod;
         			len=privModLen;
         			break;
-        	default:
-        			arr=privKey;
-        			len=privKeyLen;
-        			break;
   			}
   			break;
   		case 0x03:
@@ -404,7 +400,7 @@ public class CertTest extends Applet implements ExtendedLength {
   	else if (P1==0x02) {
   		if (P2==0x01) privExpLen=len;
   		else if (P2==0x02) privModLen=len;
-  		else privKeyLen=len;
+  		//else privKeyLen=len;
   	}
   	else if (P1==0x03) {
 			if (P2==0x01) pubExpLen=len;
