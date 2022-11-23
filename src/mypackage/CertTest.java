@@ -8,6 +8,7 @@ import javacard.security.RSAPrivateKey;
 import javacard.security.RSAPublicKey;
 import javacard.security.AESKey;
 import javacard.security.Signature;
+import javacard.security.MessageDigest;
 import javacardx.apdu.ExtendedLength;
 import javacardx.framework.string.StringUtil;
 import java.lang.*;
@@ -37,6 +38,7 @@ public class CertTest extends Applet implements ExtendedLength {
 	private short aesKeyLen;
 	Signature sig;
 	Cipher cip;
+	MessageDigest hash;
 
 	public static void install(byte[] bArray, short bOffset, byte bLength) {
   	new CertTest();
@@ -66,6 +68,7 @@ public class CertTest extends Applet implements ExtendedLength {
 		aesKeyArr=new byte[100];
 		aesKeyLen=0;
 		cip=Cipher.getInstance(Cipher.ALG_AES_ECB_ISO9797_M1,false);
+		hash=MessageDigest.getInstance(MessageDigest.ALG_SHA_256,false);
     register();
   }
 
@@ -386,6 +389,59 @@ public class CertTest extends Applet implements ExtendedLength {
 		}
 	}
 
+	public void hashIt(APDU apdu, byte count) {
+		byte ex=0;
+		byte reason=0;
+		byte progress=0;
+		try {
+			byte[] arr=new byte[2000];
+			progress=1;
+			short len=setArray(apdu,arr,(short) 0);
+			progress=2;
+			progress=3;
+			progress=4;
+			byte[] res=new byte[2000];
+			progress=5;
+			short resLen=0;
+			for (byte i=0;i<count;i++) {
+				resLen=hash.doFinal(arr,(short)0,len,res,(short)0);
+				progress=(byte)(6*(i+1));
+				Util.arrayCopyNonAtomic(res, (short)0, arr, (short) 0, resLen);
+				progress=(byte)(7*(i+1));
+				len=resLen;
+				progress=(byte)(8*(i+1));
+			}
+			sendIt(apdu,res,resLen);
+			progress=9;
+		}
+		catch (SystemException se) {
+			ex=5;
+			reason=(byte)se.getReason();
+		}
+		catch(CryptoException ce) {
+			short a=ce.getReason();
+			ex=1;
+			reason=(byte)a;
+		}
+  	catch (ISOException e) {
+			ex=2;
+  	}
+  	catch (SecurityException e) {
+  		SecurityException a=e;
+			ex=3;
+  	}
+  	catch (Exception e) {
+			ex=4;
+  	}
+		finally {
+			byte[] res=JCSystem.makeTransientByteArray((short)3,JCSystem.CLEAR_ON_RESET);
+			res[0]=ex;
+			res[1]=reason;
+			res[2]=progress;
+			sendIt(apdu,res,(short)3);
+		}
+	}
+
 	public void setAESKey(APDU apdu) {
 		byte ex=0;
 		byte reason=0;
@@ -498,6 +554,9 @@ public class CertTest extends Applet implements ExtendedLength {
 				boolean encrypt=true;
 				if (P1==0x01) encrypt=false;
 				encryptDecryptAES(apdu,encrypt,P2);
+				break;
+			case 0x32:
+				hashIt(apdu,P2);
 				break;
   	}
   	if (P1==0x01) certLen=len;
